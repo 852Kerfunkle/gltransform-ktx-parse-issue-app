@@ -1,8 +1,11 @@
 {
-  "name": "my-app",
+  "name": "gltransform-ktx-parse-issue-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@gltf-transform/core": "2.1.7",
+    "@gltf-transform/extensions": "2.1.7",
+    "@gltf-transform/functions": "2.1.7",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",

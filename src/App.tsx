@@ -2,6 +2,32 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import { Document, WebIO } from '@gltf-transform/core';
+import { prune, textureResize, dedup, quantize, weld } from '@gltf-transform/functions';
+const io = new WebIO();
+
+async function preprocessMesh(buffer: ArrayBuffer, mime_type: string): Promise<Uint8Array> {
+    let document: Document;
+    const uint8view = new Uint8Array(buffer);
+    if (mime_type === "model/gltf-binary") {
+        document = await io.readBinary(uint8view);
+    } else {
+        const textEnc = new TextDecoder("utf-8");
+        const json = JSON.parse(textEnc.decode(uint8view));
+        document = await io.readJSON({json: json, resources: {}});
+    }
+
+    await document.transform(
+        prune(),
+        dedup(),
+        quantize(),
+        weld(),
+        textureResize({size: [512, 512]})
+    );
+
+    return io.writeBinary(document);
+}
+
 function App() {
   return (
     <div className="App">
